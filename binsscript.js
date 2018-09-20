@@ -8,250 +8,293 @@
  */
 "use strict";
 const version = '0.0.1';
-class Bins 
-{
+
+
+class Bins {
 
     constructor(selector) {
         this.selector = selector;
         if (typeof selector == 'string') {
-            this.e = document.querySelectorAll(selector);
+            if (document.querySelectorAll(selector).length > 0) {
+                this.e = document.querySelectorAll(selector);
+            }
         }
         else {
             this.e = [];
             this.e[0] = this.selector;
         }
-        return {
-            exist : ()=>{ // CHECK ELEMENT EXIST OR NOT
-                return  (this.e)? true : false;
-            },
-            length :  this.getLength(),
-            value : () =>{
-                return this.e[0].value;
-            },
-            setAttr : (attrArray) =>{ // 
-                if (this.getLength() > 0) {
-                    if (Object.keys(attrArray).length > 0) {
-                        for (let a in attrArray) {
-                            if (this.getLength() == 1) {
-                                this.setAttribute(this.e[0], a, attrArray[a]);
-                            } else {
-                                for(let node of this.e) {
-                                    this.setAttribute(node, a, attrArray[a]);
-                                }
-                            }
-                        }
-                        return true;
+    }
+
+    exist() { // CHECK ELEMENT EXIST OR NOT
+        return (this.e) ? true : false;
+    }
+
+    value() {
+        return this.e[0].value;
+    }
+    setAttr(attrArray) { // 
+        if (this.getLength() > 0) {
+            if (Object.keys(attrArray).length > 0) {
+                for (let a in attrArray) {
+                    if (this.getLength() == 1) {
+                        this.setAttribute(this.e[0], a, attrArray[a]);
                     } else {
-                        this.exception(405);
-                    }
-                } else {
-                    this.exception(404);
-                }
-            },
-            getAttr : (attrName)=>{
-                if (this.getLength() > 0) {
-                    if (attrName) {
-                        return this.e[0].getAttribute(attrName);
-                    }
-                } else {
-                    this.exception(404);
-                }
-                         
-            },
-            addClass :(className)=>{
-                if (className) {
-                    if (this.getLength() > 0) {
                         for (let node of this.e) {
-                            this.manageClass(node, className, 'add');
-                        }
-                    } else {
-                        this.exception(404);
-                    }
-                } else {
-                    this.exception(406);
-                }
-                return true;
-            },
-            removeAttr : (attrName) =>{
-                for (let node of this.e) {
-                   this.removeAttribute(node, attrName);
-                }
-            },
-            hasAttr : (attrName) =>{
-                return this.e[0].hasAttribute(attrName);
-            },
-            removeClass :(className)=>{
-                if (className) {
-                    if (this.getLength() > 0) {
-                        for (let node of this.e) {
-                            this.manageClass(node, className, 'remove');
-                        }
-                    } else {
-                        this.exception(404);
-                    }
-                } else {
-                    this.exception(406);
-                }
-            },
-            css : (cssParams) =>{
-                if (this.getLength() > 0) {
-                    if (Object.keys(cssParams).length > 0) {
-                        for (let c in cssParams) {
-                            for (let node of this.e) {
-                                this.setStyle(node, c, cssParams[c]);
-                            }
-                        }
-                        return true;
-                    } else {
-                        this.exception(407);
-                    }
-                } else {
-                    this.exception(404);
-                }
-            },
-            setHtml : (htmlContent="", outer=false)=>{
-                if (htmlContent != '') {
-                    for (let node of this.e) {
-                        switch (outer) {
-                            case true:
-                                node.outerHTML = htmlContent;
-                                break;
-                            default:
-                                node.innerHTML = htmlContent;
-                                break;
+                            this.setAttribute(node, a, attrArray[a]);
                         }
                     }
-                    return true;
-                } else {
-                    return this.e[0].innerHTML;
                 }
-                
-            },
-            getHtml : (outer=false)=>{
-                return (outer == true) ? this.e[0].outerHTML : this.e[0].innerHTML;
-            },
-            text: (textContent="") => {
-                if (textContent != '') {
+                return true;
+            } else {
+                this.exception(405);
+            }
+        } else {
+            this.exception(404);
+        }
+    }
+    getAttr(attrName) {
+        if (this.getLength() > 0) {
+            if (attrName) {
+                return this.e[0].getAttribute(attrName);
+            }
+        } else {
+            this.exception(404);
+        }
+    }
+    addClass(className) {
+        if (className) {
+            if (this.getLength() > 0) {
+                for (let node of this.e) {
+                    this.manageClass(node, className, 'add');
+                }
+            } else {
+                this.exception(404);
+            }
+        } else {
+            this.exception(406);
+        }
+        return true;
+    }
+    removeAttr(attrName) {
+        for (let node of this.e) {
+            this.removeAttribute(node, attrName);
+        }
+    }
+    hasAttr(attrName) {
+        return this.e[0].hasAttribute(attrName);
+    }
+    removeClass(className) {
+        if (className) {
+            if (this.getLength() > 0) {
+                for (let node of this.e) {
+                    this.manageClass(node, className, 'remove');
+                }
+            } else {
+                this.exception(404);
+            }
+        } else {
+            this.exception(406);
+        }
+    }
+    hasClass(className) {
+        let classValue = this.e[0].classList.value;
+        return (classValue.indexOf(className) > -1 )
+    }
+    css(cssParams) {
+        if (this.getLength() > 0) {
+            if (Object.keys(cssParams).length > 0) {
+                for (let c in cssParams) {
                     for (let node of this.e) {
-                        node.innerText = textContent;
-                    }
-                    return true;
-                } else {
-                    return this.e[0].innerText;
-                }
-            },
-            clone : ()=>{
-                return this.e[0].cloneNode(true);
-            },
-            new : ()=>{
-                return document.createElement(this.selector);
-            },
-            append : (html)=>{
-                for (let node of this.e) {
-                    if (typeof html == 'string') {
-                        node.insertAdjacentHTML('beforeend',html);
-                    } else if (typeof html == 'object') {
-                        node.appendChild(html);
+                        this.setStyle(node, c, cssParams[c]);
                     }
                 }
                 return true;
-            },
-            prepend: (html) => {
-                for (let node of this.e) {
-                    if (typeof html == 'string') {
-                        node.insertAdjacentHTML('afterbegin', html);
-                    } else if (typeof html == 'object') {
-                        node.prepend(html);
-                    }
-                }
-                return true;
-            },
-            show: () => {
-                if (this.getLength() > 0) {
-                    for (let node of this.e) {
-                        this.showHide(node, 'show');
-                    }
-                } else {
-                    this.exception(404);
-                }
-                return true;
-            },
-            hide: () => {
-                if (this.getLength() > 0) {
-                    for (let node of this.e) {
-                        this.showHide(node, 'hide');
-                    }
-                } else {
-                    this.exception(404);
-                }
-                return true;
-            },
-            fadeOut :(duration='')=>{
-                for (let node of this.e) {
-                    this.fadeInOut(node, duration, true);
-                }
-            },
-            fadeIn: (duration='') => {
-                for (let node of this.e) {
-                    this.fadeInOut(node, duration, false);
-                }
-            },
-            
-            slideUp: (duration='') => {
-                for (let node of this.e) {
-                    this.slideUpDown(node, duration, true);
-                }
-            },
-
-            slideDown: (duration = '') => {
-                for (let node of this.e) {
-                    this.slideUpDown(node, duration, false);
-                }
-            },
-
-            toggle: (type, duration) => {
-                for (let node of this.e) {
-                    if (node.hasAttribute('data-show')) {
-                        node.removeAttribute('data-show')
-                    } else {
-                        this.setAttribute(node, 'data-show', true);
-                    }
-                    if (type == 'fade') {
-                        (node.getAttribute('data-show')) ? this.fadeInOut(node, duration, false) : this.fadeInOut(node, duration, true);
-                    } else if (type == 'slide') {
-                        (node.getAttribute('data-show')) ? this.slideUpDown(node, duration, true) : this.slideUpDown(node, duration, false);
-                    } else {
-                        (node.getAttribute('data-show')) ? this.showHide(node, 'show') : this.showHide(node, 'hide');
-                    }
-                }
-                return true;
-            },
-
-            bind : (eventName, action)=>{
-                for (let node of this.e) {
-                    node.addEventListener(eventName, action, true);
+            } else {
+                this.exception(407);
+            }
+        } else {
+            this.exception(404);
+        }
+    }
+    setHtml(htmlContent = "", outer = false) {
+        if (htmlContent != '') {
+            for (let node of this.e) {
+                switch (outer) {
+                    case true:
+                        node.outerHTML = htmlContent;
+                        break;
+                    default:
+                        node.innerHTML = htmlContent;
+                        break;
                 }
             }
-        };
+            return true;
+        } else {
+            return this.e[0].innerHTML;
+        }
+
+    }
+    getHtml(outer = false) {
+        return (outer == true) ? this.e[0].outerHTML : this.e[0].innerHTML;
+    }
+    text(textContent = "") {
+        if (textContent != '') {
+            for (let node of this.e) {
+                node.innerText = textContent;
+            }
+            return true;
+        } else {
+            return this.e[0].innerText;
+        }
+    }
+    clone() {
+        return this.e[0].cloneNode(true);
+    }
+    new() {
+        return document.createElement(this.selector);
+    }
+    parent()
+    {
+        return this.e[0].parentElement;
+    }
+    next() {
+        return this.e[0].nextSibling;
+    }
+    previous() {
+        return this.e[0].previousSibling;
+    }
+    children()
+    {
+        return this.e[0].children;
+    }
+    last() {
+        let nodeList = Array.prototype.slice.call(this.e);
+        return nodeList[ nodeList.length -1 ];
+    }
+    first() {
+        return this.e[0];
     }
     
+    data(attrName) {
+        return this.getAttr('data-'+attrName);
+    }
+    empty(){
+        for (let node of this.e) {
+            node.innerHTML = '';
+        }
+        return true;
+    }
+    remove()
+    {
+        for (let node of this.e) {
+            node.parentElement.removeChild(node);
+        }
+        return true;
+    }
+    append(html) {
+        for (let node of this.e) {
+            if (typeof html == 'string') {
+                node.insertAdjacentHTML('beforeend', html);
+            } else if (typeof html == 'object') {
+                node.appendChild(html);
+            }
+        }
+        return true;
+    }
+    prepend(html) {
+        for (let node of this.e) {
+            if (typeof html == 'string') {
+                node.insertAdjacentHTML('afterbegin', html);
+            } else if (typeof html == 'object') {
+                node.prepend(html);
+            }
+        }
+        return true;
+    }
+    show() {
+        if (this.getLength() > 0) {
+            for (let node of this.e) {
+                this.showHide(node, 'show');
+            }
+        } else {
+            this.exception(404);
+        }
+        return true;
+    }
+    hide() {
+        if (this.getLength() > 0) {
+            for (let node of this.e) {
+                this.showHide(node, 'hide');
+            }
+        } else {
+            this.exception(404);
+        }
+        return true;
+    }
+    fadeOut(duration = '') {
+        for (let node of this.e) {
+            this.fadeInOut(node, duration, true);
+        }
+    }
+    fadeIn(duration = '') {
+        for (let node of this.e) {
+            this.fadeInOut(node, duration, false);
+        }
+    }
+
+    slideUp(duration = '') {
+        for (let node of this.e) {
+            this.slideUpDown(node, duration, true);
+        }
+    }
+
+    slideDown(duration = '') {
+        for (let node of this.e) {
+            this.slideUpDown(node, duration, false);
+        }
+    }
+
+    toggle(type, duration) {
+        for (let node of this.e) {
+            if (node.hasAttribute('data-show')) {
+                node.removeAttribute('data-show')
+            } else {
+                this.setAttribute(node, 'data-show', true);
+            }
+            if (type == 'fade') {
+                (node.getAttribute('data-show')) ? this.fadeInOut(node, duration, false) : this.fadeInOut(node, duration, true);
+            } else if (type == 'slide') {
+                (node.getAttribute('data-show')) ? this.slideUpDown(node, duration, true) : this.slideUpDown(node, duration, false);
+            } else {
+                (node.getAttribute('data-show')) ? this.showHide(node, 'show') : this.showHide(node, 'hide');
+            }
+        }
+        return true;
+    }
+
+    bind(eventName, action) {
+        for (let node of this.e) {
+            node.addEventListener(eventName, action);
+        }
+    }
+
     exception(code) {
         let msg = '';
-        switch(code) {
-            case 404 :
-                msg =  this.selector +' not exist';
+        switch (code) {
+            case 404:
+                msg = this.selector + ' not exist';
                 break;
-            case 405 :
-                msg = this.selector +' : need atleast one attribute to set';
+            case 405:
+                msg = this.selector + ' : need atleast one attribute to set';
                 break;
-            case 406 :
-                msg = this.selector +' : no class name send';
+            case 406:
+                msg = this.selector + ' : no class name send';
                 break;
-            case 407 :
-                msg = this.selector +' : need atleast one css [property]';
+            case 407:
+                msg = this.selector + ' : need atleast one css [property]';
                 break;
         }
-        console.log('%c'+msg, 'color: red');
+        console.log('%c' + msg, 'color: red');
 
     }
     sleepDutaion(duration) {
@@ -280,7 +323,7 @@ class Bins
         }
         return true;
     }
-    /* FADE IN/OUT A NODE */
+    /// FADE IN/OUT A NODE 
     fadeInOut(node, duration, out = true) {
         if (out) { // fade out
             var opacity = 1;
@@ -314,7 +357,7 @@ class Bins
             }, this.sleepDutaion(duration));
         } else { // fade in
             var opacity = 0;
-            this.showHide(node,'show');
+            this.showHide(node, 'show');
             let i = setInterval(() => {
                 new Promise((resolve, reject) => {
                     if (!duration) {
@@ -346,7 +389,7 @@ class Bins
         }
         return true;
     }
-    /* SLIDE UP/DOWN A NODE */
+    // SLIDE UP/DOWN A NODE 
     slideUpDown(node, duration, up = true) {
         if (up == true) { //slide up
             let _nodeHeight = node.scrollHeight;
@@ -408,39 +451,40 @@ class Bins
                 })
             }, this.sleepDutaion(duration))
         }
-        
+
     }
-    /* SET STYLE OF A NODE */
+    /// SET STYLE OF A NODE 
     setStyle(node, propName, propValue) {
         node.style[propName] = propValue;
         return true;
     }
-    /* ADD OR REMOVE CLASS NAME OF A NODE */
-    manageClass(node, className,action) {
+    /// ADD OR REMOVE CLASS NAME OF A NODE 
+    manageClass(node, className, action) {
         if (action == 'add') {
             node.classList.add(className);
-        } else if(action == 'remove') {
+        } else if (action == 'remove') {
             node.classList.remove(className);
         }
         return true;
     }
-    /* SET ATTRIBUTE WITH THE NODE */
+    /// SET ATTRIBUTE WITH THE NODE 
     setAttribute(node, attrName, attrValue) {
         node.setAttribute(attrName, attrValue);
         return true;
     }
-    /* REMOVE ATTRIBUTE FROM NODE */
+    // REMOVE ATTRIBUTE FROM NODE
     removeAttribute(node, attrName) {
         node.removeAttribute(attrName);
         return true;
     }
-    /* GET THE LENGTH OF A ELEMENT */
-    getLength()
-    {
+    /// GET THE LENGTH OF A ELEMENT
+    getLength() {
         return this.e.length;
     }
+
+    
 }
-window.bins = (ele) =>{
-    const objBins  = new Bins(ele);
+var bins = (ele) => {
+    const objBins = new Bins(ele);
     return objBins;
 }
