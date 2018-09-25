@@ -1,6 +1,6 @@
 # BinsScript
 
-All important plugings are included into one. Like html, date etc.
+> All important plugings are included into one. Like html, date etc.
 ### HTML
 
 #### Class
