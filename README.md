@@ -1,8 +1,6 @@
-# BinsScript
-
+# Scripting
 > All important plugings are included into one. Like html, date etc.
-### HTML
-
+## HTML
 #### Class
 `Add Class`
 ```sh
@@ -154,4 +152,43 @@ bins.node('.textBox').bind('focus',(e)=> {
 ...
 ...
 ...
+```
+
+## DATE
+`Now`
+```sh
+bins.date().date
+```
+`Get Date`
+```sh
+bins.date('2018-09-25').getDate()
+```
+`Get Month`
+```sh
+bins.date('2018-09-25').getMonth()
+```
+`Get Year`
+```sh
+bins.date('2018-09-25').getYear()
+```
+`Get week day`
+```sh
+bins.date('2018-09-25').getWeekDay()
+```
+`Get Time`
+```sh
+bins.date('2018-09-25').getTime()
+```
+`Get Timezone`
+```sh
+bins.date('2018-09-25').getTimeZone()
+```
+`Get Timezone`
+```sh
+bins.date('2018-09-25').getTimeZone()
+```
+`Add or substract day/month/year`
+`Option param 1 = "day", "month", "year" param2 = 1 or 2 or 3 or -4 or -20 etc` 
+```sh
+bins.date(date).add('year',3)
 ```
