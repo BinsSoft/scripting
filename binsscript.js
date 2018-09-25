@@ -10,7 +10,8 @@
 const version = '0.0.1';
 
 
-class Bins {
+
+class HtmlHelper {
 
     constructor(selector) {
         this.selector = selector;
@@ -274,7 +275,7 @@ class Bins {
 
     bind(eventName, action) {
         for (let node of this.e) {
-            node.addEventListener(eventName, action);
+            node.addEventListener(eventName, action,false, true);
         }
     }
 
@@ -323,9 +324,9 @@ class Bins {
         }
         return true;
     }
-    /// FADE IN/OUT A NODE 
+    /*  FADE IN/OUT A NODE  */
     fadeInOut(node, duration, out = true) {
-        if (out) { // fade out
+        if (out) { /*  fade out */
             var opacity = 1;
             let i = setInterval(() => {
                 new Promise((resolve, reject) => {
@@ -355,7 +356,7 @@ class Bins {
 
 
             }, this.sleepDutaion(duration));
-        } else { // fade in
+        } else { /*  fade in */
             var opacity = 0;
             this.showHide(node, 'show');
             let i = setInterval(() => {
@@ -389,9 +390,9 @@ class Bins {
         }
         return true;
     }
-    // SLIDE UP/DOWN A NODE 
+    /*  SLIDE UP/DOWN A NODE  */
     slideUpDown(node, duration, up = true) {
-        if (up == true) { //slide up
+        if (up == true) { /* slide up */
             let _nodeHeight = node.scrollHeight;
             let i = setInterval(() => {
                 new Promise((resolve, reject) => {
@@ -420,7 +421,7 @@ class Bins {
                     }
                 })
             }, this.sleepDutaion(duration))
-        } else { //slide down
+        } else { /* slide down */
             this.showHide(node, 'show');
             let _nodeHeight = node.scrollHeight;
             let _newNodeHeight = 0;
@@ -453,12 +454,12 @@ class Bins {
         }
 
     }
-    /// SET STYLE OF A NODE 
+    /*  SET STYLE OF A NODE  */
     setStyle(node, propName, propValue) {
         node.style[propName] = propValue;
         return true;
     }
-    /// ADD OR REMOVE CLASS NAME OF A NODE 
+    /*  ADD OR REMOVE CLASS NAME OF A NODE  */
     manageClass(node, className, action) {
         if (action == 'add') {
             node.classList.add(className);
@@ -467,24 +468,261 @@ class Bins {
         }
         return true;
     }
-    /// SET ATTRIBUTE WITH THE NODE 
+    /*  SET ATTRIBUTE WITH THE NODE  */
     setAttribute(node, attrName, attrValue) {
         node.setAttribute(attrName, attrValue);
         return true;
     }
-    // REMOVE ATTRIBUTE FROM NODE
+    /*  REMOVE ATTRIBUTE FROM NODE */
     removeAttribute(node, attrName) {
         node.removeAttribute(attrName);
         return true;
     }
-    /// GET THE LENGTH OF A ELEMENT
+    /*  GET THE LENGTH OF A ELEMENT */
     getLength() {
         return this.e.length;
     }
+    /* FORM VALIDATION  */
+    validation () {
+        var form = this.e[0];
+        return form.addEventListener('submit', (event)=>{
+            for (let err of form.querySelectorAll('.err')) {
+                err.parentNode.removeChild(err);
+            }
+            var errorCount = 0;
+            var numberRegex = /^[0-9]+$/;
+            var emailRegex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
+            for (var input of form.children) {
+                if (input.nodeName === 'SELECT' || input.nodeName === 'INPUT') {
+                    if (input.classList.value.indexOf('required') > -1) {
+                        if (input.value === "") {
+                            let i = document.createElement('i');
+                            i.classList.add('err');
+                            i.innerText = input.getAttribute('data-name') + " is required";
+
+                            input.parentNode.insertBefore(i, input.nextSibling);
+                            errorCount++;
+                        }
+                    }
+                    if (input.classList.value.indexOf('number') > -1) {
+                        if (input.value !== "") {
+                            let vallidNumber = numberRegex.test(input.value);
+                            console.log(vallidNumber);
+                            if (vallidNumber === false) {
+                                let i = document.createElement('i');
+                                i.classList.add('err');
+                                i.innerText = input.getAttribute('data-name') + " is not valid number";
+                                input.parentNode.insertBefore(i, input.nextSibling);
+                                errorCount += 1;
+                            }
+                        }
+                    }
+                    if (input.getAttribute('type') === 'email' || input.classList.value.indexOf('email') > -1) {
+                        if (input.value !== '') {
+                            var vaildEmail = emailRegex.test(input.value);
+                            if (vaildEmail == false) {
+                                let i = document.createElement('i');
+                                i.classList.add('err');
+                                i.innerText = input.getAttribute('data-name') + " is not valid email";
+                                input.parentNode.insertBefore(i, input.nextSibling);
+                                errorCount += 1;
+                            }
+                        }
+                    }
+                    if (input.getAttribute('data-compare')) {
+                        if (input.value !== '') {
+                            if (input.value !== form.querySelector("input[name=" + input.getAttribute("data-compare") + "]").value) {
+                                let i = document.createElement('i');
+                                i.classList.add('err');
+                                i.innerText = input.getAttribute('data-name') + " is not matching";
+                                input.parentNode.insertBefore(i, input.nextSibling);
+                                errorCount += 1;
+                            }
+                        }
+                    }
+                }
+
+            }
+            if (errorCount > 0) {
+                event.preventDefault();
+            }
+            return true;
+        })
+        
+    }
+}
+
+
+class DateHelper
+{
+    constructor(element, offset) {
+        if (element) {
+            if ( typeof element == 'string' ) {
+                this.date = new Date(element);
+            } else if (typeof element == 'object') {
+                this.date = element;
+            }
+        } else {
+            this.date = new Date();
+        }
+        
+        if (offset) {
+            this.date = this.changeTimeZone(offset);
+        }
+        
+    }
+
+    changeTimeZone(offset) {
+        let d = this.date;
+        let utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+        let nd = new Date(utc + (60000 * offset));
+        return nd;
+    }
+
+    getDate() {
+        return this.date.getDate();
+    }
+    getMonth() {
+        let monthArr = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        let m = this.date.getMonth();
+
+        return {
+            month : m+1,
+            name: monthArr[m],
+            shortName : monthArr[m].substr(0,3)
+        };
+    }
+    getYear() {
+        return this.date.getFullYear();
+    }
+
+    getWeekDay() {
+        let weekDays = ['Sunday','Monday','TuesDay','Wednesday','Thursday','Friday','Saturday'];
+        let dayNo = this.date.getDay();
+        return {
+            day : dayNo,
+            name : weekDays[dayNo],
+            shortName: weekDays[dayNo].substr(0, 3)
+        } ;
+    }
+    getTime()
+    {
+        return this.date.getTime();
+    }
+    getTimeZone()
+    {
+        return {
+            "name": /\((.*)\)/.exec(this.date.toString())[1],
+            "offset":this.date.getTimezoneOffset()};
+    }
     
+    getGetOrdinal(n) {
+        var s = ["th", "st", "nd", "rd"],
+            v = n % 100;
+        return ((n<10)?"0":"")+n + (s[(v - 20) % 10] || s[v] || s[0]);
+    }
+    format(formatStr) {
+        var formatedDate = formatStr;
+        switch (formatStr) {
+            case "full":
+                return this.format("WDD, DDD MMMM YYYY h:mm:ss ap");
+                break;
+            case "full-date":
+                return this.format("YYYY-M-DD");
+                break;
+            case "full-time":
+                return this.format("hh:mm:ss");
+                break;
+            case "time":
+                return this.format("h:mm ap");
+                break;
+            default :
+                if (formatStr.indexOf("MMMM") > -1) {
+                    formatedDate = formatedDate.replace("MMMM", this.getMonth().name);/* Ex : January */
+                }
+                if (formatStr.indexOf("MM") > -1) {
+                    formatedDate = formatedDate.replace("MM", this.getMonth().shortName);/* Ex : Jan */
+                }
+                if (formatStr.indexOf("M") > -1) {
+                    let monthStr = this.getMonth().month;
+                    monthStr = (monthStr < 10) ? "0" + monthStr: monthStr;
+                    formatedDate = formatedDate.replace("M", monthStr);/* Ex: 1 2 3 */
+                }
+
+                if (formatStr.indexOf("YYYY") > -1) {
+                    formatedDate = formatedDate.replace("YYYY", this.getYear());/* Ex : 2018 2017 */
+                }
+                if (formatStr.indexOf("YY") > -1) {
+                    formatedDate = formatedDate.replace("YY", parseInt((this.getYear()).toString().substr(2)));/* Ex : 18, 17  */
+                }
+
+                if (formatStr.indexOf("WDD") > -1) {
+                    formatedDate = formatedDate.replace("WDD", this.getWeekDay().name);/* Ex : Sunday, Monday  */
+                }
+                if (formatStr.indexOf("WD") > -1) {
+                    formatedDate = formatedDate.replace("WD", this.getWeekDay().shortName);/* Ex :Sun, Mon  */
+                }
+
+                if (formatStr.indexOf("hh") > -1) {
+                    formatedDate = formatedDate.replace("hh", this.date.getHours());/* Ex : 12 13 14  */
+                }
+                if (formatStr.indexOf("h") > -1) {
+                    formatedDate = formatedDate.replace("h", (this.date.getHours() > 12) ? this.date.getHours() - 12 : this.date.getHours());/* Ex : 1 2 3 */
+                }
+
+                if (formatStr.indexOf("mm") > -1) {
+                    formatedDate = formatedDate.replace("mm", this.date.getMinutes());/* Ex : 1 2 3 */
+                }
+
+                if (formatStr.indexOf("ss") > -1) {
+                    formatedDate = formatedDate.replace("ss", this.date.getSeconds());/* Ex : 1 2 3 */
+                }
+
+                if (formatStr.indexOf("ap") > -1) {
+                    formatedDate = formatedDate.replace("ap", (this.date.getHours() >= 12) ? "PM" : "AM");/* Ex : AM PM */
+                }
+
+                if (formatStr.indexOf("DDD") > -1) {
+                    
+                    formatedDate = formatedDate.replace("DDD", this.getGetOrdinal(this.getDate()));/* Ex : 1st 2nd 3rd 10th  */
+                }
+                if (formatStr.indexOf("DD") > -1) {
+                    let d = this.getDate();
+                    d = ((d < 10) ? "0" : "")+d;
+                    formatedDate = formatedDate.replace("DD", d);/* Ex : 1 2 10 12  */
+                }
+                break;
+        }
+        
+        return formatedDate;
+    }
+    add(type, num) {
+        if (type == 'day'){
+            var newdate = this.date;
+            newdate.setDate(newdate.getDate() + parseInt(num));
+            return newdate;
+        } 
+        else if (type== 'month') {
+            var newdate = this.date;
+            newdate.setMonth(newdate.getMonth() + parseInt(num));
+            return newdate;
+        }
+        else if (type == 'year') {
+            let newDate = new Date(this.getYear() + parseInt(num), this.getMonth().month, this.getDate());
+            return newDate;
+        }
+    }
+
 }
-var bins = (ele) => {
-    const objBins = new Bins(ele);
-    return objBins;
+
+class BinsClass  {
+    node(element) {
+        return new HtmlHelper(element);
+    }
+
+    date(element, offset) {
+        return new DateHelper(element, offset)
+    }
 }
+var bins = new BinsClass();
