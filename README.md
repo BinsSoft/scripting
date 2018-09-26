@@ -192,3 +192,28 @@ bins.date('2018-09-25').getTimeZone()
 ```sh
 bins.date(date).add('year',3)
 ```
+`Formating the date`
+```sh
+bins.date().format('<format string>')
+```
+| Format | Example |
+| ------ | ------ |
+| DDD | 1st, 2nd, 3rd, 10th, 11th |
+| DD | 01, 02, 03, 10, 11, 20 |
+| MMMM | January, March, December |
+| MM | Jan, Mar, Dec |
+| M | 01, 02, 09, 12 |
+| YYYY | 2018, 2017, 1990 |
+| YY | 18, 17, 90 |
+| WDD | Sunday, Monday |
+| WD | Sun, Mon |
+| hh | 01, 02, 13, 14, 18, 20 |
+| h | 01, 02, 03, 05, 08, 09 |
+| mm | 08, 09, 20, 25, 45 |
+| ss | 07, 09, 15, 18, 20 |
+| ap | AM, PM |
+| Custom Format | Example |
+| full (WDD, DDD MMMM YYYY h:mm:ss ap) | Sunday, 1st January, 2018 05:30:20 AM |
+| full-date (YYYY-M-DD)| 2018-01-01 |
+| full-time (hh:mm:ss) | 05:30:20 |
+| time (h:mm ap) | 05:30 AM |
