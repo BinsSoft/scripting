@@ -1,4 +1,4 @@
-//console.log(bins().fu().x(1));
+
 let date = '2017-09-20';
 console.log("add year ", bins.date(date).add('year',3));
 console.log("substract year ", bins.date(date).add('year',-3));
@@ -20,7 +20,7 @@ console.log("Full Date", bins.date('2018-05-05').format('full-date'));
 console.log("Full Time", bins.date().format('full-time'));
 console.log("Time", bins.date().format('time'));
 
-bins.node('.form').validation();
+bins.node('#frm-1').validation();
 
 
 
@@ -84,6 +84,7 @@ console.log("previous", bins.node("#prepend-child").previous());
 console.log("children", bins.node(".text-2").children());
 console.log("Last", bins.node(".text-2").last());
 console.log("First", bins.node(".text-2").first());
+console.log("Nth of type", bins.node(".text-2").eq(1));
 console.log("Check class exist", bins.node(bins.node(".text-2").first()).hasClass('text-2'));
 
 console.log("Empty", bins.node(".text-2").empty());

@@ -15,13 +15,13 @@ class HtmlHelper {
 
     constructor(selector) {
         this.selector = selector;
+        this.e = [];
         if (typeof selector == 'string') {
             if (document.querySelectorAll(selector).length > 0) {
                 this.e = document.querySelectorAll(selector);
             }
         }
         else {
-            this.e = [];
             this.e[0] = this.selector;
         }
     }
@@ -169,11 +169,24 @@ class HtmlHelper {
         return this.e[0].children;
     }
     last() {
-        let nodeList = Array.prototype.slice.call(this.e);
-        return nodeList[ nodeList.length -1 ];
+        if (this.getLength() > 0 ) {
+            let nodeList = Array.prototype.slice.call(this.e);
+            return nodeList[ nodeList.length -1 ];
+        }
+        return null;
     }
     first() {
-        return this.e[0];
+        if (this.getLength() > 0) {
+            return this.e[0];
+        }
+        return null;
+    }
+
+    eq(index) {
+        if ((this.getLength()-1) < index){
+            return this.e[index];
+        }
+        return null;
     }
     
     data(attrName) {
@@ -484,16 +497,21 @@ class HtmlHelper {
     }
     /* FORM VALIDATION  */
     validation () {
+        
         var form = this.e[0];
         return form.addEventListener('submit', (event)=>{
             for (let err of form.querySelectorAll('.err')) {
                 err.parentNode.removeChild(err);
             }
-            var errorCount = 0;
+            var errorCount = 1;
             var numberRegex = /^[0-9]+$/;
             var emailRegex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 
-            for (var input of form.children) {
+            var inputArr = Array.prototype.slice.call(document.forms[form.getAttribute('id')].getElementsByTagName('input'));
+            var selectArr = Array.prototype.slice.call(document.forms[form.getAttribute('id')].getElementsByTagName('select'));
+            inputArr = inputArr.concat(selectArr)
+            
+            for (var input of inputArr) {
                 if (input.nodeName === 'SELECT' || input.nodeName === 'INPUT') {
                     if (input.classList.value.indexOf('required') > -1) {
                         if (input.value === "") {
@@ -725,4 +743,4 @@ class BinsClass  {
         return new DateHelper(element, offset)
     }
 }
-var bins = new BinsClass();
+var bins = new BinsClass;

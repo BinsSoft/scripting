@@ -138,6 +138,26 @@ bins.node(".text").last()
 ```sh
 bins.node(".text").first()
 ```
+`Nth of type`
+```sh
+bins.node("#frm").eq(index)
+```
+#### Form Validation
+![N|Solid](https://s3.amazonaws.com/diigo/9598440_474387431_35832448?AWSAccessKeyId=0R7FMW7AXRVCYMAPTPR2&Expires=1537955070&Signature=m%2F0lT3X8WgMWr%2FaeldF%2Fgsy86%2BU%3D)
+```sh
+<form action="" id="frm">
+    <input type="text" class="required" name="name" data-name="Name" placeholder="Name"/>
+    <input type="text" class="required number" name="age" data-name="Age" placeholder="Age"/>
+    <input type="text" class="required email" name="email" data-name="Email" placeholder="Email"/>
+    <input type="password" class="required" name="password" data-name="Password" placeholder="Password"/>
+    <input type="password" class="required" name="confirm_password" data-name="Confirm Password" placeholder="Confirm Password" data-compare="password"/>
+    <input type="submit" name="submit" value="Submit" id="submitBtn" />
+</form>
+
+bins.node('#frm').validation()
+```
+
+
 #### Event Bind
 ```sh
 bins.node('.clickBtn').bind('click',(e)=> {

@@ -17,13 +17,33 @@
     </style>
 </head>
 <body>
-    <form class="form">
-        <input type="text" class="required" data-name="Name" placeholder="Name"/>
-        <input type="text" class="required number" data-name="Age" placeholder="Age" />
-        <input type="email" class="required" data-name="Email" placeholder="Email" />
+    <form class="form" id="frm-1">
+        <p>
+            <input type="text" class="required" data-name="Name" placeholder="Name"/>
+        </p>
+        <p>
+            <input type="text" class="required number" data-name="Age" placeholder="Age" />
+        </p>
+        <p>
+        <input type="text" class="required email" data-name="Email" placeholder="Email" />
+        </p>
+        <p>
         <input type="password" class="" name="password" data-name="Password" placeholder="Password" />
+        </p>
+        <p>
         <input type="password" class="" data-name="Confirm Password" placeholder="Confirm Password" data-compare="password" />
+        </p>
+        <p>
+            <select name="country" data-name="country" class="required">
+                <option value="">Select Country</option>
+                <option value="IN">IND</option>
+                <option value="UK">UK</option>
+                <option value="USA">USA</option>
+            </select>
+        </p>
+        <p>
         <input type="submit" name="submit" value="Submit" id="submitBtn" />
+        </p>
     </form>
     <input type="text" id="nameTextBox" />
     <button class="clickBtn" >Click It</button>
