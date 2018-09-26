@@ -212,8 +212,8 @@ bins.date().format('<format string>')
 | mm | 08, 09, 20, 25, 45 |
 | ss | 07, 09, 15, 18, 20 |
 | ap | AM, PM |
-| Custom Format | Example |
-| full (WDD, DDD MMMM YYYY h:mm:ss ap) | Sunday, 1st January, 2018 05:30:20 AM |
-| full-date (YYYY-M-DD)| 2018-01-01 |
-| full-time (hh:mm:ss) | 05:30:20 |
-| time (h:mm ap) | 05:30 AM |
+| **Custom Format**  |
+| **full** (WDD, DDD MMMM YYYY h:mm:ss ap) | Sunday, 1st January, 2018 05:30:20 AM |
+| **full-date** (YYYY-M-DD)| 2018-01-01 |
+| **full-time** (hh:mm:ss) | 05:30:20 |
+| **time** (h:mm ap) | 05:30 AM |
